@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{%  load static%}
+{% block body %}
+    <div class="ftco-blocks-cover-1">
+      <div class="site-section-cover overlay" style="background-image: url('{% static '' %}assets/images/hero_1.jpg')">
+        <div class="container">
+          <div class="row align-items-center justify-content-center text-center">
+            <div class="col-md-5" data-aos="fade-up">
+              <h1 class="mb-3 text-white">Blogger</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="site-section">
+      <div class="container">
+
+       
+        <div class="row">
+<!--           for start-->
+           {% if blogs %}
+            {% for blog in blogs %}
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="post-entry-1 h-100">
+              <a href="{% url 'blogs:blog-detail' blog.slug %}">
+                <img src="{{ blog.blogimage_set.first.image.url }}" alt="Image"
+                 class="img-fluid">
+              </a>
+              <div class="post-entry-1-contents">
+                
+                <h2><a href="{% url 'blogs:blog-detail' blog.slug %}">{{ blog.title }}</a></h2>
+                <span class="meta d-inline-block mb-3">{{ blog.created_at|date:"d.NY" }} <span class="mx-2">by</span> <a href="{% url 'blogs:blog-detail' blog.slug %}">{{ blog.author.name }}</a></span>
+              </div>
+            </div>
+          </div>
+            {% endfor %}
+            {% else %}
+              <div class="coming-soon-container">
+                <h1>Yeni bloglar tezliklə Blogger-də</h1>
+                <p>Hal hazirda web sayt  üzərində işlər gedir</p>
+              </div>
+            {% endif %}
+<!--           end for-->
+        </div>
+
+<!--        pagination start-->
+          {%  if paginator.num_pages > 1%}
+        <div class="col-12 mt-5 text-center">
+            {% if blogs.has_previous %}
+          <a href="?page={{ blogs.previous_page_number }}" class="p-3"><</a>
+            {% endif %}
+            {% for i in blogs.paginator.page_range %}
+          <a href="?page={{i}}" class="p-3" style="{% if blogs.number == i %}color:black{% endif %}">{{i}}</a>
+            {% endfor %}
+            {% if blogs.has_next %}
+          <a href="?page={{ blogs.next_page_number }}" class="p-3">></a>
+            {% endif %}
+        </div>
+          {%  endif%}
+<!--        pagination end-->
+        
+      </div>
+    </div> <!-- END .site-section -->
+{% endblock %}

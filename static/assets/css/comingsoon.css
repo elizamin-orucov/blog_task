@@ -1,0 +1,27 @@
+/* .coming-soon-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+} */
+
+
+.coming-soon-container {
+    text-align: center;
+    background: rgb(255, 166, 111);
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.coming-soon-container h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.coming-soon-container p {
+    font-size: 1.2em;
+    color: #666;
+}

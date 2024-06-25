@@ -1,0 +1,16 @@
+
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.custom-checkbox input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+#categories-select {
+    width: 100%;
+    height: auto;
+    padding: 5px;
+    box-sizing: border-box;
+}

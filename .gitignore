@@ -1,0 +1,8 @@
+.venv/
+venv/
+.idea/
+media/
+manage.py
+.dockerignore
+commands.txt
+Dockerfile

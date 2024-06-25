@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+
+<input type="hidden" name="csrfmiddlewaretoken" value="{% csrf_token %}">
+    <div class="ftco-blocks-cover-1">
+      <div class="site-section-cover overlay" data-stellar-background-ratio="0.5" style="background-image: url('{{blog.blogimage_set.first.image.url}}')">
+        <div class="container">
+          <div class="row align-items-center justify-content-center text-center">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="site-section">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8 blog-content">
+            <h1>{{blog.title}}</h1><small style="color:orange;">{{ blog.created_at|date:"d.NY" }}</small><small style="color:orange;">&nbsp;&bullet; by {{ blog.author.full_name }}</small>
+            <hr>
+            <p class="lead">
+              {{ blog.text|safe }}
+            </p>
+            <hr>
+            <div class="pt-5">
+                <p style="color:orange;">Categories:  {% for cat in blog.category.all %}<a href="{% url 'blogs:blog' %}?category={{ cat.id }}">{{cat}},&nbsp;</a>{% endfor %}</p>
+            </div>
+
+
+            <div class="pt-5">
+              <h3 class="mb-5">{{blog.blogreview_set.count}} Comments</h3>
+              <ul class="comment-list">
+                  {% for messages in blog.blogreview_set.all %}
+                <li class="comment">
+                  <div class="vcard bio">
+                      {% if messages.author.logo %}
+                      <img src="messages.author.logo.url" alt="Image">
+                      {% else %}
+                      <img src="{% static '' %}photos/user.jpg" alt="Image">
+                      {% endif %}
+                  </div>
+                  <div class="comment-body">
+                    <h3>{{ blog.author.full_name }}</h3>
+                    <div class="meta">{{ messages.created_at|date:"d.NY" }}</div>
+                    <p>{{ messages.message }}</p>
+                  </div>
+                </li>{% endfor %}
+              </ul>
+              <!-- END comment-list -->
+              
+              <div class="comment-form-wrap pt-5">
+                <form class="" method="POST">
+                  {% csrf_token %}
+                  <div class="form-group">
+<!--                    <label for="message">Message</label>-->
+<!--                    <textarea name="" id="message" cols="30" rows="10" class="form-control"></textarea>-->
+                    {{ form.message }}
+                  </div>
+                  <div class="form-group">
+                    <input type="submit" value="Post Comment" class="btn btn-primary btn-md text-white">
+                  </div>
+
+                </form>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-md-4 sidebar">
+            <p>
+            <a onclick="getWish('{{blog.id}}')">
+            <i class="fas fa-heart fa-lg" id="blog-{{blog.id}}" style="color:orange;"></i>
+            </a>
+            <div class="sidebar-box">
+              <form action="#" class="search-form">
+                <div class="form-group">
+                  <span class="icon fa fa-search"></span>
+                  <input type="text" class="form-control" placeholder="Type a keyword and hit enter">
+                </div>
+              </form>
+            </div>
+            <div class="sidebar-box">
+              <div class="categories">
+<!--                categories start-->
+                <h3>Categories</h3>
+                  {% for cat in category %}
+                <li><a href="{% url 'blogs:blog' %}?category={{ cat.id }}">{{cat.name}} <span>({{cat.category_count}})</span></a></li>
+                  {% endfor %}
+<!--                categories end-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+
+{% block js %}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+  const wish_url = "{% url 'blogs:wish-create' %}"
+
+	function getWish(id) {
+		console.log(id)
+		$.ajax({
+        type: "POST",
+        url: wish_url,
+        data: {
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+            action: 'post',
+            id: id,
+        },
+
+        success: function (data){
+            if (data.created == true){
+                console.log(data.created)
+                $('#blog-' + id).css('color', 'red');
+                }
+            else {
+            $('#blog-' + id).css('color', 'orange');
+            }
+
+        },
+
+        error: function(xhr, errmsg, err) {
+            print(xhr, errmsg, err)
+        },
+    });
+	}
+</script>
+{% endblock %}
