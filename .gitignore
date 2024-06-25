@@ -4,5 +4,4 @@ venv/
 media/
 manage.py
 .dockerignore
-commands.txt
 Dockerfile
